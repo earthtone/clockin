@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Add Job</title>
+		<link rel="stylesheet" href="../index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+				main { padding: 1em;  }
+				form { margin: 1em; }
+				label { color: goldenrod; }
+
+				#counter {
+					position: relative;
+				}
+
+				#counter.w3-show {
+					display: flex !important;
+					flex-direction: column;
+					align-items: center;
+				}
+
+				#open-counter {
+					float: right;
+				}
+		</style>
+	</head>
+	<body>
+		<header class="w3-container w3-green">
+			<h1>Add New Job</h1>
+		</header>
+		<main>
+			<button id="open-counter" class="w3-button w3-red">
+				<span class="fa fa-clock-o"></span>
+			</button>
+			<section id="counter" class="w3-dropdown-content">
+				<h2>Total Hours</h2>
+				<h3 id="total-hours">00:00:00.00</h3>
+				<h2>Total Dollars</h2>
+				<h3 id="total-dollars">$0.00</h3>
+				
+				<button id="start-btn" class="w3-btn w3-red">Start</button>
+				<button id="stop-btn" class="w3-btn w3-red display-none">Stop</button>
+			</section>
+			
+			<form id="add-new-job__form" class="w3-container">
+				<input type="text" name="job_id" class="w3-input" value="5000.D"><label for="job_id">Job ID Number</label>
+				<input type="text" name="description" class="w3-input" value="Web Development"><label for="description">Job Description</label>
+				<input type="text" name="rate" class="w3-input" value="$35.00"><label for="rate">Rate per Hour</label>
+				<input type="text" name="invoice_id" class="w3-input"><label for="invoice_id">Invoice #</label>
+				<input type="text" name="input_hours" class="w3-input"><label for="input_hours">Total Hours</label>
+				<input type="date" name="input_date" class="w3-input"><label for="input_date">Date</label>
+				<input type="submit" class="w3-input w3-green">
+			</form>
+
+		</main>
+		<script>
+			const ipc = require('electron').ipcRenderer;
+			const current = require('electron').remote.require('./main').current;
+			const Job = require('../lib/job');
+			
+			const parseFormData = require('../lib/parse-form-data.js');
+			const $form = document.querySelector('#add-new-job__form');
+
+			var j;
+
+			document.querySelector('input[name="invoice_id"]').value = current.invoice_number;
+
+			document.querySelector('#start-btn').addEventListener('click', function(){
+				var data = parseFormData($form, {
+						target: document.querySelector('#total-hours')
+					});
+
+				j = new Job(data);
+				j.start();
+				j.render();
+
+				document.querySelectorAll('.w3-btn').forEach(btn => btn.classList.toggle('display-none'));
+			});
+
+			document.querySelector('#stop-btn').addEventListener('click', function(){
+				j.stop();
+				document.querySelector('#total-dollars').textContent = `$${j.dollars}`;
+				document.querySelectorAll('.w3-btn').forEach(btn => btn.classList.toggle('display-none'));
+			});
+
+			document.querySelector('#add-new-job__form').addEventListener('submit', e => {
+				e.preventDefault();
+
+				if(!j){
+					let data = parseFormData($form);
+					j = new Job(data);
+				}
+
+				j.total_dollars = j.dollars;
+				j.job_date = j.date;
+
+				if(j.input_hours && !j.hours){
+					j.total_hours = parseFloat(j.input_hours);
+				} else {
+					j.total_hours = j.hours;
+				}
+
+				ipc.send('add-new-job', JSON.parse(JSON.stringify(j)));
+				window.close();
+			});
+
+			document.querySelector('#open-counter').addEventListener('click', e => {
+				e.preventDefault();
+				document.querySelector('#counter').classList.toggle('w3-show');	
+			});
+		</script>
+	</body>
+</html>

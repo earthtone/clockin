@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Timekeeper</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<header id="app-header">
+		<h3>TimeKeeper</h3>
+
+		 <div id="app-menu" class="w3-dropdown">
+			<button id="open-menu" class="w3-button w3-red">
+				<span class="fa fa-pencil"></span>
+			</button>
+			<div class="w3-dropdown-content w3-bar-block w3-border">
+				<a id="add-hours" class="w3-bar-item w3-button opn-btn" data-target="add-job">
+					Add Job
+				</a>
+				<a id="edit-info" class="w3-bar-item w3-button opn-btn" data-target="edit-info">
+					Edit Current Invoice
+				</a>
+				<a id="print-invoice" class="w3-bar-item w3-button print-btn">
+					Print Current Invoice
+				</a>
+				<a id="close-invoice" class="w3-bar-item w3-button close-invoice-btn">
+					Close Current Invoice
+				</a>
+			</div>
+		</div> 
+	</header>
+	<main id="app-container"></main>
+	<script>
+		require('./index.js');
+	</script>
+</body>
+</html>

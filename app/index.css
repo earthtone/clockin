@@ -1,0 +1,83 @@
+@import '../node_modules/normalize-css/normalize.css';
+@import '../node_modules/w3-css/w3.css';
+
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+.display-none {
+	display: none;
+}
+
+#app-header {
+	width: 100vw;
+	background-color: #333;
+	color: #fff;
+	display: flex;
+	/*justify-content: space-between;*/
+	align-items: baseline;
+	padding: 0 1em;
+}
+
+#app-menu {
+	/*position: static;*/
+	margin-left: 1em;
+}
+
+@media print {
+	#app-header {
+		display: none;
+	}
+}
+
+/* Invoice Header */
+
+#info-header {
+	display: flex;
+	justify-content: space-around;
+	width: 100vw;
+}
+
+#info-header section {
+	display: flex;
+	flex-direction: column;
+	margin: 1em;
+}
+
+.info-header__edit-btn, .info-header__save-btn {
+	align-self: flex-end;
+}
+
+.info-header__personal-street_addr {
+	display: flex;
+}
+
+.info-header__personal-street_addr input[name="town_city"][readonly="readonly"], 
+.info-header__personal-street_addr input[name="town_city"][readonly="true"] {
+	width: 5.5em;
+}
+
+
+.info-header__personal-street_addr input[name="state_province"][readonly="readonly"], 
+.info-header__personal-street_addr input[name="state_province"][readonly="true"] {
+	width: 2em;
+}
+
+
+#info-header input[readonly] {
+	border: none;
+}
+
+/* Invoice Container */
+
+.container {
+	display: flex;	
+	width: 100vw;
+	justify-content: center;
+	align-items: center;
+}
+
+#hours-table, #hours-table td, #hours-table th {
+	border: 1px solid #333;
+	padding: 0 1em;
+}

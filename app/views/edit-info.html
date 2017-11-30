@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Edit Info</title>
+		<link rel="stylesheet" href="../index.css">
+		<style>
+			form { margin: 1em; }
+			label { color: goldenrod; }
+		</style>
+	</head>
+	<body>
+		<header class="w3-container w3-green">
+			<h1>Edit Invoice Info</h1>
+		</header>
+		<main>
+
+			<form id="edit-vendor-info__form" class="w3-container" data-node="vendor">
+				<h3>Update Vendor Info</h3>
+				<input type="text" name="name" class="w3-input"><label for="name">Vendor Name</label>
+				<input type="text" name="street_addr" class="w3-input"><label for="street_addr">Street Address</label>
+				<input type="text" name="town_city" class="w3-input"><label for="town_city">Town/City</label>
+				<input type="text" name="state_province" class="w3-input"><label for="state_province">State/Province</label>
+				<input type="text" name="post_code" class="w3-input"><label for="post_code">Zip/Post Code</label>
+				<input type="text" name="country" class="w3-input"><label for="country">Country</label>
+				<input type="text" name="email_addr" class="w3-input"><label for="email_addr">Email Address</label>
+				<input type="text" name="phone_num" class="w3-input"><label for="phone_num">Phone #</label>
+				<input type="submit" class="w3-input w3-btn w3-green">
+			</form>
+			<hr>
+			<form id="edit-client-info__form" class="w3-container" data-node="client">
+				<h3>Update Client Info</h3>
+				<input type="text" name="name" class="w3-input"><label for="name">Client Name</label>
+				<input type="text" name="prefix" class="w3-input"><label for="prefix">Client Prefix</label>
+				<input type="submit" class="w3-input w3-btn w3-green">
+			</form>
+		</main>
+		<script>
+			const ipc = require('electron').ipcRenderer;
+			const current = require('electron').remote.require('./main').current;
+
+			document.querySelectorAll('input').forEach(input => {
+				let node = input.parentNode.dataset.node;
+				input.placeholder = current[node][input.name];
+			});
+
+			document.querySelectorAll('form').forEach(form => form.addEventListener('submit', e => {
+				e.preventDefault();
+
+				var data = new FormData(e.target),
+					response = {};
+
+				for(let [k, v] of data.entries()){
+					response[k] = v;
+				}
+
+				ipc.send('update-current-invoice', e.target.dataset.node, response);
+				window.close();
+			}));
+		</script>	
+	</body>
+</html>
