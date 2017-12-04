@@ -22,7 +22,9 @@ if(store.has('current')){
 }
 
 app.on('ready', function(){
-	mainWindow = new BrowserWindow();
+	mainWindow = new BrowserWindow({
+		icon: path.join(__dirname, 'assets/icons/mac/icon.icns')
+	});
 	mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 });
 
