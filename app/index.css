@@ -14,20 +14,60 @@
 	background-color: #333;
 	color: #fff;
 	display: flex;
-	/*justify-content: space-between;*/
 	align-items: baseline;
-	padding: 0 1em;
+	padding: 0;
 }
 
 #app-menu {
 	/*position: static;*/
-	margin-left: 1em;
+	margin-right: 1em;
+}
+
+#open-menu {
+	height: 65px;	
 }
 
 @media print {
-	#app-header {
+	#app-header, #tab-list {
 		display: none;
 	}
+}
+
+ /* Style the tab */
+#tab-list {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+#tab-list button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+#tab-list button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+#tab-list button.current {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.invoice-form {
+    display: none;
+ } 
+
+.invoice-form.current {
+	display: block;
 }
 
 /* Invoice Header */

@@ -9,13 +9,14 @@
 </head>
 <body>
 	<header id="app-header">
-		<h3>TimeKeeper</h3>
-
-		 <div id="app-menu" class="w3-dropdown">
+	 <div id="app-menu" class="w3-dropdown">
 			<button id="open-menu" class="w3-button w3-red">
 				<span class="fa fa-pencil"></span>
 			</button>
 			<div class="w3-dropdown-content w3-bar-block w3-border">
+				<a id="create-doc" class="w3-bar-item w3-button create-btn">
+					Create Invoice
+				</a>
 				<a id="add-hours" class="w3-bar-item w3-button opn-btn" data-target="add-job">
 					Add Job
 				</a>
@@ -30,8 +31,11 @@
 				</a>
 			</div>
 		</div> 
+		<h3>ClockIn</h3>
 	</header>
-	<main id="app-container"></main>
+	<main id="app-container">
+		<nav id="tab-list"></nav>
+	</main>
 	<script>
 		require('./index.js');
 	</script>

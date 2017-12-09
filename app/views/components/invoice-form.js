@@ -3,7 +3,7 @@ const html = require('bel');
 function InvoiceForm(current){
 	var hourList = current.jobs.map(job => job.total_hours);
 	
-	return html`<div id="invoice-form">
+	return html`<div id="${current.client.prefix}-${new Date(current.date).getFullYear()}-${current.id}" class="invoice-form">
 		<header id="info-header">
 			
 			<section id="info-header__vendor">
@@ -28,13 +28,13 @@ function InvoiceForm(current){
 			<section id="info-header__invoice">
 				<h2>Invoice</h2>
 				<div class="info-header__invoice-number">
-					<strong>Invoice #:</strong> ${current.invoice_number}
+					<strong>Invoice #:</strong> ${current.client.prefix}-${new Date(current.date).getFullYear()}-${current.id}
 				</div>
 				<div class="info-header__invoice-date">
-					<strong>Invoice Date:</strong> ${current.date.toDateString()}
+					<strong>Invoice Date:</strong> ${new Date(current.date).toDateString()}
 				</div>
 				<div class="info-header__invoice-due">
-					<strong>Invoice Due:</strong> ${current.date_due}
+					<strong>Invoice Due:</strong> ${new Date(current.due_date).toDateString()}
 				</div>	
 			</section>
 		</header>

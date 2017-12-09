@@ -64,7 +64,9 @@
 
 			var j;
 
-			document.querySelector('input[name="invoice_id"]').value = current.invoice_number;
+			ipc.on('edit-current-invoice', function(event, id){
+				document.querySelector('input[name="invoice_id"]').value = id;	
+			});
 
 			document.querySelector('#start-btn').addEventListener('click', function(){
 				var data = parseFormData($form, {
@@ -101,7 +103,7 @@
 					j.total_hours = j.hours;
 				}
 
-				ipc.send('add-new-job', JSON.parse(JSON.stringify(j)));
+				ipc.send('add-new-job', JSON.parse(JSON.stringify(j)), document.querySelector('input[name="invoice_id"]').value);
 				window.close();
 			});
 

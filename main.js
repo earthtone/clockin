@@ -12,13 +12,10 @@ const store = new Store({
 	name: 'timekeeper-store'
 });
 
-var mainWindow, current;
+var mainWindow, current = [];
 
-if(store.has('current')){
-	current = new Invoice(store.get('current'));
-} else {
-	current = new Invoice(new Date());
-	cacheData();	
+if(!getCurrent().length){
+	createInvoice();
 }
 
 app.on('ready', function(){
@@ -28,24 +25,40 @@ app.on('ready', function(){
 	mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 });
 
-ipcMain.on('open-window', function(event, target){
-	let win = new BrowserWindow({ width: 320, height: 700});
-	win.loadURL(`file://${__dirname}/app/views/${target}.html`);
+ipcMain.on('create-new-invoice', function(event){
+	createInvoice();
+	exports.current = getCurrent();
+	event.sender.send('invoice-updated');
 });
 
-ipcMain.on('add-new-job', function(event, job){
+ipcMain.on('open-window', function(event, target, id){
+	let win = new BrowserWindow({ width: 320, height: 700});
+	win.loadURL(`file://${__dirname}/app/views/${target}.html`);
+	
+	setTimeout(() => win.webContents.send('edit-current-invoice', id), 500);
+});
+
+ipcMain.on('add-new-job', function(event, job, doc){
+	var current = store.get(doc);
 	current.jobs.push(job);
-	cacheData();
+	store.set(doc, current);
+	
+	exports.current = getCurrent();
 	mainWindow.webContents.send('invoice-updated', current);
 });
 
 ipcMain.on('update-current-invoice', function(event, ...args){
-	// console.log(args);
-	var mod = {};
-	mod[args[0]] = args[1];
+	var o = store.get(args[0]);
+	o[args[1]] = args[2];
 
-	Object.assign(current, mod);
-	cacheData();	
+	var n = new Invoice(o);
+	store.set(n.invoice_number, n);
+	o.closed = true;
+	store.set(args[0], o);
+
+	let updated_current = getCurrent();
+	
+	exports.current = updated_current;
 	mainWindow.webContents.send('invoice-updated');
 });
 
@@ -69,27 +82,33 @@ ipcMain.on('print-to-pdf', function(event){
 	});
 });
 
-ipcMain.on('close-current-invoice', function(event, ...args){
-	var archive_id = `${current.client.prefix}-${current.date.getFullYear()}-${current.id}`;
-	current.closed = true;
-	store.set(archive_id, current);
+ipcMain.on('close-current-invoice', function(event, key){
+	var o = store.get(key);
+	o.closed = true;
+	store.set(key, o);
+
+	exports.current = getCurrent();
+	mainWindow.webContents.send('invoice-updated', current);
+});
+
+function createInvoice(){
+	let val = new Invoice(new Date());
+	let key = val.invoice_number;
 	
-	current = new Invoice(new Date());
-	store.set('current', current);
-
-	store.openInEditor();
-	mainWindow.webContents.send('invoice-updated', current);
-});
-
-ipcMain.on('open-new-invoice', function(event){
-	current = new Invoice(new Date());
-	mainWindow.webContents.send('invoice-updated', current);
-});
-
-function cacheData(){
-	store.set('current', current);
-	store.set('current.date_due', new Date(current.date_due).toJSON());
+	store.set(key, val);
 }
 
-exports.current = current;
+function getCurrent(){
+	var current = [];
+
+	for(let [k, v] of store){
+		if(!v.closed){
+			current.push(v);
+		}
+	}	
+
+	return current;
+}
+
 exports.store = store;
+exports.current = getCurrent();

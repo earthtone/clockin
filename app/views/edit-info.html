@@ -37,11 +37,20 @@
 		</main>
 		<script>
 			const ipc = require('electron').ipcRenderer;
-			const current = require('electron').remote.require('./main').current;
+			const store = require('electron').remote.require('./main').store;
 
-			document.querySelectorAll('input').forEach(input => {
-				let node = input.parentNode.dataset.node;
-				input.placeholder = current[node][input.name];
+			ipc.on('edit-current-invoice', (event, id) => {
+				console.log(id);
+
+				var current = store.get(id);
+				document.querySelectorAll('input').forEach(input => {
+					let node = input.parentNode.dataset.node;
+					input.placeholder = current[node][input.name];
+				});
+
+				document.querySelectorAll('form').forEach(form => {
+					form.dataset.target = id;
+				});
 			});
 
 			document.querySelectorAll('form').forEach(form => form.addEventListener('submit', e => {
@@ -54,7 +63,11 @@
 					response[k] = v;
 				}
 
-				ipc.send('update-current-invoice', e.target.dataset.node, response);
+				ipc.send('update-current-invoice', 
+					e.target.dataset.target, 
+					e.target.dataset.node, 
+					response);
+
 				window.close();
 			}));
 		</script>	

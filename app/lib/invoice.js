@@ -26,6 +26,11 @@ class Invoice {
 			prefix: 'POC'
 		};
 
+		var dueDate = new Date();
+		dueDate.setDate(this.date.getDate() + 30);
+
+		this.due_date = dueDate;
+
 		if(config){
 			if(config.date && typeof config.date === 'string'){
 				this.extend(Object.assign(config, {
@@ -35,12 +40,6 @@ class Invoice {
 				this.extend(config);
 			}
 		}
-	}
-
-	get date_due(){
-		var due = new Date();
-		due.setDate(this.date.getDate() + 30);
-		return due.toDateString();
 	}
 
 	get invoice_number(){

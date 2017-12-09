@@ -12,7 +12,10 @@ module.exports = {
         "array-bracket-spacing": "off",
         "array-callback-return": "error",
         "array-element-newline": "off",
-        "arrow-body-style": "error",
+        "arrow-body-style": [
+            "error",
+            "as-needed"
+        ],
         "arrow-parens": [
             "error",
             "as-needed"

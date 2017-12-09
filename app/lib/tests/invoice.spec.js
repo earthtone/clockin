@@ -1,8 +1,8 @@
 const test = require('tape');
-const randomHexValue = require('../lib/random-hex-value');
+const randomHexValue = require('../util/random-hex-value');
 
-const Job = require('../lib/job');
-const Invoice = require('../lib/invoice');
+const Job = require('../job');
+const Invoice = require('../invoice');
 
 
 var vendor = {
@@ -74,10 +74,10 @@ test('Invoice Class contains a date_due property', function(assert){
 	var actual = new Invoice();
 	var x = new Date();
 	var expected = x;
-	
 	expected.setDate(x.getDate() + 30);
-	assert.equal(actual.due_date.toDateString(), expected.toDateString());
-	assert.notEqual(actual.date.toDateString(), actual.due_date.toDateString()); 
+
+	assert.equal(actual.date_due, expected.toDateString());
+	assert.notEqual(actual.date.toDateString(), actual.date_due); 
 	assert.end();
 });
 
