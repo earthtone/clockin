@@ -7,7 +7,8 @@
   "scripts": {
     "pretest": "eslint ./**/*.js",
     "test": "browserify ./app/tests/*.spec.js | tape-run | tap-spec",
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "build": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds"
   },
   "keywords": [
     "electron",
