@@ -3,6 +3,10 @@ const html = require('bel');
 function InvoiceForm(current){
 	var hourList = current.jobs.map(job => job.total_hours);
 	
+	var i_date = new Date();
+	var d_date = new Date();
+	d_date.setDate(i_date.getDate() + 30);
+
 	return html`<div id="${current.client.prefix}-${new Date(current.date).getFullYear()}-${current.id}" class="invoice-form">
 		<header id="info-header">
 			
@@ -28,13 +32,13 @@ function InvoiceForm(current){
 			<section id="info-header__invoice">
 				<h2>Invoice</h2>
 				<div class="info-header__invoice-number">
-					<strong>Invoice #:</strong> ${current.client.prefix}-${new Date(current.date).getFullYear()}-${current.id}
+					<strong>Invoice #:</strong> ${current.client.prefix}-${i_date.getFullYear()}-${current.id}
 				</div>
 				<div class="info-header__invoice-date">
-					<strong>Invoice Date:</strong> ${new Date(current.date).toDateString()}
+					<strong>Invoice Date:</strong> ${i_date.toDateString()}
 				</div>
 				<div class="info-header__invoice-due">
-					<strong>Invoice Due:</strong> ${new Date(current.due_date).toDateString()}
+					<strong>Invoice Due:</strong> ${d_date.toDateString()}
 				</div>	
 			</section>
 		</header>
@@ -59,7 +63,7 @@ function InvoiceForm(current){
 						<h6>Rate per Hour</h6>
 					</th>
 				</tr>
-				${current.jobs.map(job => {
+				${current.jobs.sort((a, b) => a.job_date > b.job_date).map(job => {
 					var d = new Date(job.job_date),
 						month = parseInt(d.getMonth() + 1) >= 10 ? parseInt(d.getMonth() + 1) : `0${parseInt(d.getMonth() + 1)}`,
 						day = parseInt(d.getDate()) >= 10 ? d.getDate() : `0${d.getDate()}`,

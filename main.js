@@ -85,6 +85,14 @@ ipcMain.on('print-to-pdf', function(event){
 ipcMain.on('close-current-invoice', function(event, key){
 	var o = store.get(key);
 	o.closed = true;
+
+	var i_date = new Date();
+	var d_date = new Date();
+	d_date.setDate(i_date.getDate() + 30);
+
+	o.date = i_date.toJSON();
+	o.due_date = d_date.toJSON();
+	
 	store.set(key, o);
 
 	exports.current = getCurrent();
@@ -92,7 +100,7 @@ ipcMain.on('close-current-invoice', function(event, key){
 });
 
 function createInvoice(){
-	let val = new Invoice(new Date());
+	let val = new Invoice();
 	let key = val.invoice_number;
 	
 	store.set(key, val);
