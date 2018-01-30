@@ -17,7 +17,7 @@
   "author": "earthtone <earthlyillusion@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "browserify": "^14.5.0",
+    "browserify": "^15.2.0",
     "electron-packager": "^10.1.0",
     "eslint": "^4.12.0",
     "tap-spec": "^4.1.1",
