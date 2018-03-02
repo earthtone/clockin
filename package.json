@@ -17,16 +17,15 @@
   "author": "earthtone <earthlyillusion@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "browserify": "^15.2.0",
-    "electron-packager": "^10.1.0",
-    "eslint": "^4.12.0",
+    "browserify": "^16.1.0",
+    "electron-packager": "^11.0.1",
+    "eslint": "^4.18.1",
     "tap-spec": "^4.1.1",
-    "tape": "^4.8.0",
-    "tape-run": "^3.0.0"
+    "tape": "^4.9.0"
   },
   "dependencies": {
-    "bel": "^5.1.5",
-    "electron": "^1.7.9",
+    "bel": "^5.1.7",
+    "electron": "^1.8.2",
     "electron-store": "^1.3.0",
     "normalize-css": "^2.3.1",
     "w3-css": "^4.0.4"
